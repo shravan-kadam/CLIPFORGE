@@ -1,0 +1,6 @@
+gradio
+moviepy
+opencv-python
+numpy
+transformers
+Pillow
