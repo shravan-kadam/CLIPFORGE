@@ -12,45 +12,40 @@ from modules.composer import compose_videos
 from modules.subtitles import generate_subtitles
 from modules.subtitle_burner import burn_subtitles
 
-# --------------------------------------------------
-# Configuration
-# --------------------------------------------------
+
 UPLOAD_DIR = "assets/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# --------------------------------------------------
-# Functions
-# --------------------------------------------------
+
+# ---------------- FUNCTIONS ----------------
+
 def save_uploaded_video(video_file):
     if video_file is None:
-        return "No video uploaded."
+        return "❌ No video uploaded."
 
     filename = os.path.basename(video_file)
     destination = os.path.join(UPLOAD_DIR, filename)
     shutil.copy(video_file, destination)
 
-    return f"Video uploaded successfully: {filename}"
+    return f"✅ Video uploaded: {filename}"
 
 
 def summarize_ui(text):
     if not text.strip():
-        return "Please enter some text to summarize."
+        return "Please enter text."
     return summarize_text(text)
 
 
 def create_thumbnail(video_file, title_text):
     if video_file is None:
         return None
-
-    frame_path = extract_frame(video_file)
-    thumbnail_path = generate_thumbnail(frame_path, title_text)
-    return thumbnail_path
+    frame = extract_frame(video_file)
+    return generate_thumbnail(frame, title_text)
 
 
 def compose_ui(video_files):
-    if not video_files or len(video_files) < 1:
+    if not video_files:
         return None
-
     return compose_videos(video_files)
 
 
@@ -59,143 +54,236 @@ def subtitle_ui(video):
         return None
     return generate_subtitles(video)
 
+
 def burn_subtitles_ui(video, subtitle_file):
     if video is None or subtitle_file is None:
         return None
-
     return burn_subtitles(video, subtitle_file)
 
 
-# --------------------------------------------------
-# Gradio App
-# --------------------------------------------------
-with gr.Blocks(theme=gr.themes.Soft()) as app:
+# ---------------- CSS ----------------
 
-    gr.Markdown("## 🎬 ClipForge AI")
-    gr.Markdown("Transform raw footage into short viral content")
+custom_css = """
+body{
+background:linear-gradient(135deg,#020617,#0f172a);
+font-family:Inter;
+}
 
-    # Top navigation
+.hero{
+text-align:center;
+padding:50px;
+}
+
+.hero-title{
+font-size:44px;
+font-weight:800;
+background:linear-gradient(90deg,#60a5fa,#a78bfa,#c084fc);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.navbar{
+display:flex;
+gap:20px;
+justify-content:center;
+margin-bottom:25px;
+}
+
+.card{
+background:#0f172a;
+padding:25px;
+border-radius:14px;
+box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+"""
+
+
+# ---------------- UI ----------------
+
+with gr.Blocks(css=custom_css, theme=gr.themes.Soft()) as app:
+
+    with gr.Column(elem_classes="hero"):
+        gr.Markdown("""
+<div class="hero-title">🎬 ClipForge AI</div>
+Create viral short-form content using AI
+""")
+
+    # NAVIGATION BAR
     with gr.Row():
-        gr.Button("Upload Clips")
-        gr.Button("Describe Vision")
-        gr.Button("AI Processing")
-        gr.Button("Export & Share")
+        btn_upload = gr.Button("📥 Upload")
+        btn_summary = gr.Button("📝 Summary")
+        btn_thumbnail = gr.Button("🖼 Thumbnail")
+        btn_subtitle = gr.Button("🎤 Subtitles")
+        btn_composer = gr.Button("🎞 Composer")
+        btn_burn = gr.Button("🔥 Burn")
 
-    # --------------------------------------------------
-    # Upload Section
-    # --------------------------------------------------
-    gr.Markdown("### 📥 Upload Video")
+    # SECTIONS
 
-    video_input = gr.Video(label="Upload Video")
-    upload_status = gr.Textbox(label="Status", interactive=False)
+    with gr.Column(visible=True) as upload_section:
+        with gr.Column(elem_classes="card"):
+            video_input = gr.Video()
+            upload_btn = gr.Button("Upload Video")
+            upload_status = gr.Textbox(label="Status")
 
-    gr.Button("Save Video").click(
-        save_uploaded_video,
-        inputs=video_input,
-        outputs=upload_status
-    )
+            upload_btn.click(
+                save_uploaded_video,
+                inputs=video_input,
+                outputs=upload_status
+            )
 
-    # --------------------------------------------------
-    # Video Summarizer Tab
-    # --------------------------------------------------
-    with gr.Tab("📝 Video Summarizer"):
 
-        gr.Markdown("### AI Video Summary")
-        gr.Markdown("Paste your video transcript or description below.")
+    with gr.Column(visible=False) as summary_section:
+        with gr.Column(elem_classes="card"):
+            input_text = gr.Textbox(lines=5)
+            summarize_btn = gr.Button("Generate Summary")
+            output_text = gr.Textbox()
 
-        input_text = gr.Textbox(
-            label="Video Text",
-            placeholder="Paste video transcript or description here...",
-            lines=6
+            summarize_btn.click(
+                summarize_ui,
+                inputs=input_text,
+                outputs=output_text
+            )
+
+
+    with gr.Column(visible=False) as thumb_section:
+        with gr.Column(elem_classes="card"):
+            video_for_thumb = gr.Video()
+            title_text = gr.Textbox()
+            thumb_btn = gr.Button("Generate Thumbnail")
+            thumbnail_output = gr.Image()
+
+            thumb_btn.click(
+                create_thumbnail,
+                inputs=[video_for_thumb, title_text],
+                outputs=thumbnail_output
+            )
+
+
+    with gr.Column(visible=False) as subtitle_section:
+        with gr.Column(elem_classes="card"):
+            video_input_sub = gr.Video()
+            subtitle_btn = gr.Button("Generate Subtitles")
+            subtitle_file = gr.File()
+
+            subtitle_btn.click(
+                subtitle_ui,
+                inputs=video_input_sub,
+                outputs=subtitle_file
+            )
+
+
+    with gr.Column(visible=False) as composer_section:
+        with gr.Column(elem_classes="card"):
+            video_inputs = gr.File(file_types=[".mp4"], file_count="multiple")
+            compose_btn = gr.Button("Compose Video")
+            final_video = gr.Video()
+
+            compose_btn.click(
+                compose_ui,
+                inputs=video_inputs,
+                outputs=final_video
+            )
+
+
+    with gr.Column(visible=False) as burn_section:
+        with gr.Column(elem_classes="card"):
+            video_input_burn = gr.Video()
+            subtitle_input = gr.File()
+            burn_btn = gr.Button("Burn Subtitles")
+            output_video = gr.Video()
+
+            burn_btn.click(
+                burn_subtitles_ui,
+                inputs=[video_input_burn, subtitle_input],
+                outputs=output_video
+            )
+
+
+    # ---------- NAVIGATION FUNCTIONS (FIXED) ----------
+
+    def show_upload():
+        return (
+            gr.update(visible=True),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
         )
 
-        output_text = gr.Textbox(label="AI Summary", lines=4)
 
-        gr.Button("Generate Summary").click(
-            summarize_ui,
-            inputs=input_text,
-            outputs=output_text
+    def show_summary():
+        return (
+            gr.update(visible=False),
+            gr.update(visible=True),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
         )
 
-    # --------------------------------------------------
-    # Thumbnail Generator Tab
-    # --------------------------------------------------
-    with gr.Tab("🖼 Thumbnail Generator"):
 
-        gr.Markdown("### Generate Video Thumbnail")
-
-        video_for_thumb = gr.Video(label="Select Video")
-
-        title_text = gr.Textbox(
-            label="Thumbnail Text",
-            placeholder="Enter title text"
+    def show_thumb():
+        return (
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=True),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
         )
 
-        thumbnail_output = gr.Image(label="Generated Thumbnail")
 
-        gr.Button("Create Thumbnail").click(
-            create_thumbnail,
-            inputs=[video_for_thumb, title_text],
-            outputs=thumbnail_output
+    def show_subtitle():
+        return (
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=True),
+            gr.update(visible=False),
+            gr.update(visible=False),
         )
 
-    # --------------------------------------------------
-    # Subtitle Generator Tab
-    # --------------------------------------------------
-    with gr.Tab("📝 Subtitle Generator"):
 
-        gr.Markdown("### Generate Subtitles from Video")
-
-        video_input_sub = gr.Video(label="Upload Video")
-
-        subtitle_file = gr.File(label="Generated Subtitle (.srt)")
-
-        gr.Button("Generate Subtitles").click(
-            subtitle_ui,
-            inputs=video_input_sub,
-            outputs=subtitle_file
+    def show_composer():
+        return (
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=True),
+            gr.update(visible=False),
         )
 
-    # --------------------------------------------------
-    # Video Composer Tab
-    # --------------------------------------------------
-    with gr.Tab("🎞 Video Composer"):
 
-        gr.Markdown("### Combine Video Clips")
-        gr.Markdown("⚠️ Use normal MP4 videos (not WhatsApp videos)")
-
-        video_inputs = gr.File(
-            label="Upload Video Clips",
-            file_types=[".mp4"],
-            file_count="multiple"
+    def show_burn():
+        return (
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=False),
+            gr.update(visible=True),
         )
 
-        final_video = gr.Video(label="Final Composed Video")
 
-        gr.Button("Compose Video").click(
-            compose_ui,
-            inputs=video_inputs,
-            outputs=final_video
-        )
+    btn_upload.click(show_upload,
+        outputs=[upload_section, summary_section, thumb_section, subtitle_section, composer_section, burn_section])
 
-    with gr.Tab("🎬 Burn Subtitles Into Video"):
+    btn_summary.click(show_summary,
+        outputs=[upload_section, summary_section, thumb_section, subtitle_section, composer_section, burn_section])
 
-        gr.Markdown("### Overlay Subtitles On Video")
+    btn_thumbnail.click(show_thumb,
+        outputs=[upload_section, summary_section, thumb_section, subtitle_section, composer_section, burn_section])
 
-        video_input_burn = gr.Video(label="Upload Video")
+    btn_subtitle.click(show_subtitle,
+        outputs=[upload_section, summary_section, thumb_section, subtitle_section, composer_section, burn_section])
 
-        subtitle_input = gr.File(label="Upload Subtitle File (.srt)")
+    btn_composer.click(show_composer,
+        outputs=[upload_section, summary_section, thumb_section, subtitle_section, composer_section, burn_section])
 
-        output_video = gr.Video(label="Captioned Video")
-
-        gr.Button("Burn Subtitles").click(
-            burn_subtitles_ui,
-            inputs=[video_input_burn, subtitle_input],
-            outputs=output_video
-    )
+    btn_burn.click(show_burn,
+        outputs=[upload_section, summary_section, thumb_section, subtitle_section, composer_section, burn_section])
 
 
-# --------------------------------------------------
-# Launch App
-# --------------------------------------------------
 app.launch()
