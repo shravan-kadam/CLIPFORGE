@@ -1,8 +1,26 @@
+# Virtual Environment
 venv/
+
+# Python cache
 __pycache__/
 *.pyc
-.env
 *.pyo
 *.pyd
+
+# Environment variables
+.env
+
+# Build folders
 dist/
 build/
+
+# Project generated files
+assets/uploads/
+assets/outputs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
