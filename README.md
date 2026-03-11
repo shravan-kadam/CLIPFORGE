@@ -1,127 +1,115 @@
-# CLIPFORGE
+# 🎬 CLIPFORGE
 
-🚀 CLPFORGE
-AI-Powered Content Creation Engine
+🚀 **CLIPFORGE – AI-Powered Content Creation Engine**
 
-CLPFORGE is an AI-driven content generation toolkit that helps creators instantly generate:
+CLIPFORGE is an AI-driven toolkit that helps creators generate high-performing content assets such as:
 
-🎬 Video Ideas
+- 🎬 Video ideas
+- 📝 Scripts
+- 🗣 Subtitles
+- 🖼 Thumbnail concepts and prompts
 
-📝 Scripts
+It is designed for creators who want to **produce content faster, maintain consistency, and increase engagement** without spending hours brainstorming.
 
-🗣 Subtitles
+---
 
-🖼 Thumbnail Concepts & AI Prompts
+# ✨ Features
 
-Built for creators who want speed, consistency, and higher engagement without wasting hours brainstorming.
+## 1️⃣ Idea Generator
 
-🔥 Features
-1️⃣ Idea Generator
+Generate high-potential content ideas based on:
 
-Generates high-potential content ideas based on:
+- Niche
+- Target Audience
+- Content Type (Shorts, Long-form, Reels, etc.)
+- Trend-inspired prompt patterns
 
-Niche
+Focus: **attention-driven ideas rather than generic topics**.
 
-Target Audience
+---
 
-Content Type (Shorts, Long-form, Reels, etc.)
+## 2️⃣ Script Generator
 
-Trending-style prompt patterns
+Creates structured scripts optimized for viewer retention.
 
-Focus: Ideas engineered for attention and scalability, not generic topics.
+Structure includes:
 
-2️⃣ Script Generator
-
-Creates structured, retention-optimized scripts including:
-
-Hook
-
-Pattern Interrupts
-
-Retention Loops
-
-Body Content
-
-Call-to-Action (CTA)
+- Hook
+- Pattern Interrupts
+- Retention Loops
+- Body Content
+- Call-to-Action (CTA)
 
 Supports:
 
-Short-form (30–60 sec)
+- Short-form scripts (30–60 seconds)
+- Long-form YouTube scripts
+- Educational breakdowns
+- Storytelling formats
 
-Long-form YouTube scripts
+---
 
-Educational breakdowns
+## 3️⃣ Subtitle Generator
 
-Storytelling formats
+Generates subtitles designed to improve engagement:
 
-3️⃣ Subtitle Generator
+- Short, punchy lines
+- Scroll-stopping formatting
+- Retention-focused phrasing
+- Optional `.srt` subtitle export
 
-Generates subtitles designed for engagement:
+---
 
-Short, punchy lines
-
-Scroll-stopping formatting
-
-Retention-focused phrasing
-
-Optional SRT-style structure support
-
-4️⃣ Thumbnail Generator
+## 4️⃣ Thumbnail Generator
 
 Generates:
 
-High-CTR thumbnail text
+- High-CTR thumbnail text
+- Visual direction concepts
+- AI image prompts compatible with:
 
-Visual direction concepts
+  - Midjourney
+  - DALL·E
+  - Stable Diffusion
 
-AI image prompts (Midjourney / DALL·E / Stable Diffusion ready)
+Based on:
 
-Built around:
+- Curiosity gap
+- Emotional triggers
+- Click-through psychology
 
-Curiosity Gap
+---
 
-Emotional Triggers
+# 🧠 How It Works
 
-Click-through psychology
+CLIPFORGE uses **AI models + prompt engineering** to:
 
-🧠 How It Works
+1. Analyze the topic or niche input
+2. Generate multiple content ideas
+3. Structure scripts optimized for retention
+4. Format subtitles for engagement
+5. Suggest high-CTR thumbnail concepts
 
-CLPFORGE uses prompt engineering + AI models to:
+The goal is to **optimize content performance**, not just generate text.
 
-Analyze niche or topic input
+---
 
-Generate multiple idea variations
+# 🎯 Target Users
 
-Structure scripts for audience retention
+CLIPFORGE is designed for:
 
-Format subtitles for engagement
+- YouTube Creators
+- Short-form Content Creators
+- Digital Marketers
+- Content Agencies
+- Personal Brands
 
-Suggest high-CTR thumbnail concepts
+---
 
-The system focuses on content performance, not just content generation.
+# ⚙️ Installation
 
-🎯 Target Users
+Clone the repository:
 
-YouTube Creators
-
-Short-form Content Creators
-
-Digital Marketers
-
-Content Agencies
-
-Personal Brands
-
-🚧 Roadmap
-
-Planned improvements:
-
-Direct AI thumbnail image generation
-
-Trend scraping integration
-
-Multi-language support
-
-SEO optimization module
-
-Performance analytics dashboard
+```bash
+git clone https://github.com/shravan-kadam/CLIPFORGE.git
+cd CLIPFORGE
