@@ -1,3 +1,14 @@
+---
+title: ClipForge AI
+emoji: 🎬
+colorFrom: purple
+colorTo: blue
+sdk: gradio
+python_version: "3.10.13"
+app_file: app.py
+pinned: false
+---
+
 # 🎬 CLIPFORGE
 
 🚀 **CLIPFORGE – AI-Powered Content Creation Engine**
