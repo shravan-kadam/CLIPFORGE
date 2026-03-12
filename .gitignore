@@ -15,8 +15,8 @@ dist/
 build/
 
 # Project generated files
-assets/uploads/
-assets/outputs/
+assets/uploads/*
+assets/outputs/*
 !assets/uploads/.gitkeep
 !assets/outputs/.gitkeep
 
